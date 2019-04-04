@@ -30,11 +30,17 @@ prop = ["contrast", "dissimilarity", "homogeneity", "energy", "correlation", "AS
 angles = range(0, 181, 45)
 dist = range(1, 5)
 
+
 resultats = {}
 
 for classificador in classificadors:
 
     resultats[classificador["title"]] = []
+
+    for d in range(len(definitions.divisions)):
+        resultats[classificador["title"]].append([])
+
+print(resultats)
 
 for size in definitions.sizes:  # De cada mida volem obtenir totes les imatges de tots els datasets
 
@@ -51,7 +57,7 @@ for size in definitions.sizes:  # De cada mida volem obtenir totes les imatges d
             img = cv2.imread(nom_path + image_name)
             img = img[:, :, 0]
 
-            glcm = greycomatrix(img, distances=dist, angles=angles, symmetric=True, normed=True)
+            glcm = greycomatrix(img, distances=dist, angles=angles, symmetric=True, normed=False)
 
             n_features = len(angles) * len(dist)
             m = np.zeros((n_features * len(prop)))
@@ -69,53 +75,61 @@ for size in definitions.sizes:  # De cada mida volem obtenir totes les imatges d
     print(X.shape, Y.shape)
 
     # Normalitzar les dades
-    min_max_scaler = StandardScaler()
-    X_minmax = min_max_scaler.fit_transform(X)
+    # min_max_scaler = StandardScaler()
+    # X = min_max_scaler.fit_transform(X)
 
-    X_train, X_test, y_train, y_test = train_test_split(X_minmax, y, test_size=0.25, random_state=23)
+    for idx, d in enumerate(definitions.divisions):
+        XX = X / d
+        #XX = XX.astype(np.uint8)
+        X_train, X_test, y_train, y_test = train_test_split(XX, y, test_size=0.25, random_state=23)
 
-    if definitions.config["do_pca"] == True:
+        if definitions.config["do_pca"] == True:
 
-        pca = PCA(n_components=X_train.shape[1])
+            pca = PCA(n_components=X_train.shape[1])
 
-        principalComponents = pca.fit(X_train)
+            principalComponents = pca.fit(X_train)
 
-        cumsum = np.cumsum(pca.explained_variance_ratio_)
+            cumsum = np.cumsum(pca.explained_variance_ratio_)
 
-        r = np.where(cumsum > 0.85)
+            r = np.where(cumsum > 0.9)
 
-        pca = PCA(n_components=r[0][0])
-        X_train = pca.fit_transform(X_train)
-        print("Train")
-        print(X_train.shape)
+            pca = PCA(n_components=r[0][0])
+            X_train = pca.fit_transform(X_train)
+            print("Train")
+            print(X_train.shape)
 
-        X_test = pca.fit_transform(X_test)
-        print("Test")
-        print(X_test.shape)
+            X_test = pca.transform(X_test)
+            print("Test")
+            print(X_test.shape)
 
-    # For amb diferents classificadors
+        # For amb diferents classificadors
 
-    for classificador in classificadors:
-        clf = GridSearchCV(classificador['clf'], param_grid=classificador['params'])
-        clf.fit(X_train, y_train)
+        for classificador in classificadors:
+            clf = GridSearchCV(classificador['clf'], param_grid=classificador['params'], verbose=0 )
+            clf.fit(X_train, y_train)
 
-        pred = clf.predict(X_test)
-        print(classificador['title'])
-        print(confusion_matrix(y_test, pred))
-        print("##################################")
-        print(classification_report(y_test, pred))
-        _, recall, _, _ = precision_recall_fscore_support(y_test, pred, average="macro")
+            pred = clf.predict(X_test)
+            print(classificador['title'])
+            print(confusion_matrix(y_test, pred))
+            print("##################################")
+            print(classification_report(y_test, pred))
+            _, recall, _, _ = precision_recall_fscore_support(y_test, pred, average="macro")
 
-        resultats[classificador['title']].append(recall)
+            resultats[classificador['title']][idx].append(recall)
 
 for classificador in classificadors:
+    plt.figure()
+    for jdx, d in enumerate(definitions.divisions):
 
-    plt.plot(resultats[classificador['title']], label=classificador['title'])
-plt.title("Recall")
-plt.legend()
-plt.xticks(np.arange(len(definitions.sizes)), list(definitions.sizes))
-plt.xlabel("Patch size")
-plt.show()
+        plt.plot(resultats[classificador['title']][jdx], label= str(d))
+
+    plt.title("Recall " + classificador['title'])
+    plt.legend()
+    plt.xticks(np.arange(len(definitions.sizes)), list(definitions.sizes))
+    plt.xlabel("Patch size")
+    plt.savefig("Recall " + classificador['title']  + ".png")
+    plt.close()
+
 
 
 

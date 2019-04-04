@@ -2,7 +2,7 @@ import os
 
 class definitions:
 
-    config = { "do_pca": False}
+    config = { "do_pca": False, "min_max_scaler": False }
 
     path = ""
 
@@ -11,7 +11,10 @@ class definitions:
     else:
         path = "patates"
 
-    tipus_sol = {"agricola": ["e_agricola", "e_agricola_1"], "forestal_arbrat" : ["e_forestal_arbrat", "e_forestal_arbrat_1"],
-             "forestal_no_arbrat": ["e_forestal_no_arbrat", "e_forestal_no_arbrat_1"]}
+    tipus_sol = {"agricola": ["e_agricola", "e_agricola_1",  "e_agricola_2"],
+                 "forestal_arbrat" : ["e_forestal_arbrat", "e_forestal_arbrat_1", "e_forestal_arbrat_2"],
+             "forestal_no_arbrat": ["e_forestal_no_arbrat", "e_forestal_no_arbrat_1", "e_forestal_no_arbrat_2"]}
 
-    sizes = range(3, 21, 2)
+    sizes = range(3, 11, 2) #  range(3, 21, 2)
+
+    divisions = [32.0, 16.0, 8.0, 4.0, 2.0, 1]

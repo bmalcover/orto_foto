@@ -1,19 +1,26 @@
 from sklearn.svm import SVC
+from sklearn import neighbors
 from sklearn.neural_network import MLPClassifier
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 
 
 classificadors = [{'title': 'Gradient Boosting',
-                   'params': {'max_depth': range(5, 16, 2), 'min_samples_split': [10, 100, 500, 1000],
-                              'n_estimators': [10, 50, 100]},
+                   'params': {'max_depth': range(5, 21, 2), 'min_samples_split': [5, 10, 100, 500, 1000],
+                              'n_estimators': [10, 50, 100, 150]},
                    'clf': GradientBoostingClassifier(learning_rate=0.1, max_features='sqrt',
                                                      subsample=0.8,
                                                      random_state=42),
                    'enabled': True, 'pca': False},
-                  {'title': 'Support Vector Machine',
-                   'params': {'C': [0.1, 1, 10, 100, 1000], 'gamma': [0.001, 0.01, 0.1, 1, 10]},
-                   'clf': SVC(kernel='rbf'),
+                  {'title': 'Nearest Neighbours',
+                   'params': {'n_neighbors': [5, 10, 15, 20], 'weights': ['uniform', 'distance'],
+                              'algorithm' : ['auto', 'ball_tree', 'kd_tree', 'brute']},
+                   'clf': neighbors.KNeighborsClassifier(),
                    'enabled': True, 'pca': False},
+
+                  # {'title': 'Support Vector Machine',
+                  #  'params': { 'kernel': ['linear'],'C': [1000], 'gamma': [ 0.1, 10, 100]},
+                  #  'clf': SVC(),
+                  #  'enabled': True, 'pca': False},
                   # {'title': 'Multi Layer Perceptron',
                   #  'params': {'hidden_layer_sizes': [(2, 2), (2, 3), (3, 3), (3, 4), (2, 4), (2, 5), (4, 2), (4, 3),
                   #                                    (4, 4), (4, 5)], 'alpha': [1e-4, 1e-5, 1e-6, 1e-7]},
