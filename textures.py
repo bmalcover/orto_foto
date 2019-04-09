@@ -85,13 +85,9 @@ for size in definitions.sizes:  # De cada mida volem obtenir totes les imatges d
         if definitions.config["do_pca"] == True:
 
             pca = PCA(n_components=X_train.shape[1])
-
             principalComponents = pca.fit(X_train)
-
             cumsum = np.cumsum(pca.explained_variance_ratio_)
-
             r = np.where(cumsum > 0.9)
-
             pca = PCA(n_components=r[0][0])
             X_train = pca.fit_transform(X_train)
             print("Train")
