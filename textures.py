@@ -25,10 +25,9 @@ import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 np.random.seed(42)
 
-prop = ["contrast", "dissimilarity", "homogeneity", "energy", "correlation", "ASM"]
+#prop = ["contrast", "dissimilarity", "homogeneity", "energy", "correlation", "ASM"]
 
-angles = range(0, 181, 45)
-dist = range(1, 5)
+
 
 
 resultats = {}
@@ -57,12 +56,12 @@ for size in definitions.sizes:  # De cada mida volem obtenir totes les imatges d
             img = cv2.imread(nom_path + image_name)
             img = img[:, :, 0]
 
-            glcm = greycomatrix(img, distances=dist, angles=angles, symmetric=True, normed=False)
+            glcm = greycomatrix(img, distances=definitions.dist, angles=definitions.angles, symmetric=True, normed=False)
 
-            n_features = len(angles) * len(dist)
-            m = np.zeros((n_features * len(prop)))
+            n_features = len(definitions.angles) * len(definitions.dist)
+            m = np.zeros((n_features * len(definitions.prop)))
 
-            for idx, p in enumerate(prop):  # obtenim features de la matriu GLCM
+            for idx, p in enumerate(definitions.prop):  # obtenim features de la matriu GLCM
                 f = greycoprops(glcm, prop=p)
                 m[(idx*n_features): (idx + 1) * n_features] = f.flatten()
             # Conjunts d'entrenament
