@@ -11,7 +11,7 @@ s = 5
 d = 1
 
 
-clf = pickle.load(open( "res_dissabte_migdia_20190414-210416.clf", "rb" ))
+clf = pickle.load(open("____.clf", "rb" ))
 
 img = cv2.imread(df.imatges + "classificacio_01.png")
 img = img[:, :, 0]

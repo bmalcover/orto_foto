@@ -1,12 +1,13 @@
 import os
 import cv2
+import time
+import copy
 import numpy as np
+import pickle
 
-import pandas as pd
-import seaborn as sns
 import matplotlib.pyplot as plt
 
-from definitions import definitions
+from definitions import definitions as df
 from classifiers import classificadors
 
 from skimage.feature import greycomatrix, greycoprops
@@ -25,64 +26,66 @@ import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 np.random.seed(42)
 
-#prop = ["contrast", "dissimilarity", "homogeneity", "energy", "correlation", "ASM"]
-
-
-
-
+max_recall = 0
+best_clf = None
 resultats = {}
+config = None
+
+
 
 for classificador in classificadors:
 
     resultats[classificador["title"]] = []
 
-    for d in range(len(definitions.divisions)):
+    for d in range(len(df.divisions)):
         resultats[classificador["title"]].append([])
 
-print(resultats)
+for divisio, d in enumerate(df.divisions):
 
-for size in definitions.sizes:  # De cada mida volem obtenir totes les imatges de tots els datasets
+    for size in df.sizes:  # De cada mida volem obtenir totes les imatges de tots els datasets
 
-    xs = []
-    y = []
-    print("AVALUAM : " + str(size))
-    print("#######################################")
-    for ts in definitions.tipus_sol.keys():  # per cada conjunt d'entrenament
+        xs = []
+        y = []
+        print("AVALUAM : " + str(size))
+        print("#######################################")
+        for ts in df.tipus_sol.keys():  # per cada conjunt d'entrenament
 
-        nom_path = definitions.path + "\\" + ts + "\\" + str(size) + "\\"
+            nom_path = df.path + "\\" + ts + "\\" + str(size) + "\\"
 
-        for image_name in (os.listdir(nom_path)):
+            for image_name in (os.listdir(nom_path)):
 
-            img = cv2.imread(nom_path + image_name)
-            img = img[:, :, 0]
+                img = cv2.imread(nom_path + image_name)
+                img = img[:, :, 0] / d
 
-            glcm = greycomatrix(img, distances=definitions.dist, angles=definitions.angles, symmetric=True, normed=False)
+                img = img.astype(np.uint8)
 
-            n_features = len(definitions.angles) * len(definitions.dist)
-            m = np.zeros((n_features * len(definitions.prop)))
+                glcm = greycomatrix(img, distances=df.dist, angles=df.angles, symmetric=True, normed=False)
 
-            for idx, p in enumerate(definitions.prop):  # obtenim features de la matriu GLCM
-                f = greycoprops(glcm, prop=p)
-                m[(idx*n_features): (idx + 1) * n_features] = f.flatten()
-            # Conjunts d'entrenament
-            xs.append(m)
-            y.append(ts)
+                n_features = len(df.angles) * len(df.dist)
+                m = np.zeros((n_features * len(df.prop)))
 
-    X = np.asarray(xs)
-    Y = np.asarray(y)
+                for idx, p in enumerate(df.prop):  # obtenim features de la matriu GLCM
+                    f = greycoprops(glcm, prop=p)
+                    m[(idx*n_features): (idx + 1) * n_features] = f.flatten()
+                # Conjunts d'entrenament
+                xs.append(m)
+                y.append(ts)
 
-    print(X.shape, Y.shape)
+        X = np.asarray(xs)
+        Y = np.asarray(y)
 
-    # Normalitzar les dades
-    # min_max_scaler = StandardScaler()
-    # X = min_max_scaler.fit_transform(X)
+        print(X.shape, Y.shape)
 
-    for idx, d in enumerate(definitions.divisions):
-        XX = X / d
+        if df.config["min_max"]:
+        # Normalitzar les dades
+            min_max_scaler = StandardScaler()
+            X = min_max_scaler.fit_transform(X)
+
+        XX = X
         #XX = XX.astype(np.uint8)
         X_train, X_test, y_train, y_test = train_test_split(XX, y, test_size=0.25, random_state=23)
 
-        if definitions.config["do_pca"] == True:
+        if df.config["do_pca"] == True:
 
             pca = PCA(n_components=X_train.shape[1])
             principalComponents = pca.fit(X_train)
@@ -110,23 +113,31 @@ for size in definitions.sizes:  # De cada mida volem obtenir totes les imatges d
             print(classification_report(y_test, pred))
             _, recall, _, _ = precision_recall_fscore_support(y_test, pred, average="macro")
 
-            resultats[classificador['title']][idx].append(recall)
+            if recall > max_recall:
+                max_recall = recall
+                best_clf = copy.deepcopy(clf)
+                config = d, size
+
+            resultats[classificador['title']][divisio].append(recall)
 
 for classificador in classificadors:
     plt.figure()
-    for jdx, d in enumerate(definitions.divisions):
+    for jdx, d in enumerate(df.divisions):
 
         plt.plot(resultats[classificador['title']][jdx], label= str(d))
 
     plt.title("Recall " + classificador['title'])
     plt.legend()
-    plt.xticks(np.arange(len(definitions.sizes)), list(definitions.sizes))
+    plt.xticks(np.arange(len(df.sizes)), list(df.sizes))
     plt.xlabel("Patch size")
-    plt.savefig("Recall " + classificador['title']  + ".png")
+    plt.savefig("Recall " + classificador['title'] + "_" + timestr  + ".png")
     plt.close()
 
+    timestr = time.strftime("%Y%m%d-%H")
+    f = open("res_" + classificador['title'] + "_" + timestr + ".clf", 'wb')
+    pickle.dump(clf, f)
 
-
+    print(config[0], " - ", config[1])
 
 
 

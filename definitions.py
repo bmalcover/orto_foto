@@ -2,9 +2,10 @@ import os
 
 class definitions:
 
-    config = { "do_pca": False, "min_max_scaler": False }
-
     path = ""
+    imatges = "imatges/"
+
+    config = {"do_pca": False, "min_max": False}
 
     if os.name == "nt":  # os.join
         path = "C:\\Users\\gabri\\Dropbox (Maisie)\\Ortofoto\\arees_entrenament\\png\\"
@@ -13,9 +14,9 @@ class definitions:
 
     prop = ["contrast", "dissimilarity", "homogeneity", "energy", "correlation", "ASM"]
 
-    tipus_sol = {"agricola": ["e_agricola", "e_agricola_1",  "e_agricola_2"],
-                 "forestal_arbrat" : ["e_forestal_arbrat", "e_forestal_arbrat_1", "e_forestal_arbrat_2"],
-             "forestal_no_arbrat": ["e_forestal_no_arbrat", "e_forestal_no_arbrat_1", "e_forestal_no_arbrat_2"]}
+    tipus_sol = {"agricola": ["e_agricola", "e_agricola_1"],
+                 "forestal_arbrat" : ["e_forestal_arbrat", "e_forestal_arbrat_1" ],
+             "forestal_no_arbrat": ["e_forestal_no_arbrat", "e_forestal_no_arbrat_1"]}
 
     sizes = range(3, 11, 2) #  range(3, 21, 2)
 

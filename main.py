@@ -13,7 +13,7 @@ for tipus in definitions.tipus_sol.keys():
 
     for nom in definitions.tipus_sol[tipus]:
 
-        img = cv2.imread(definitions.path+ nom + ".png")
+        img = cv2.imread(definitions.path+ nom + ".tif")
 
         img = img[:, :, 0]
         h, w = img.shape
@@ -39,10 +39,7 @@ for tipus in definitions.tipus_sol.keys():
                 for j in range(0, w-s, s):
                     submatrix = img[i:i+s, j:j+s]
 
-                    if 255 not in submatrix and contador < 1000:
+                    if 0 not in submatrix and contador < 1000:
                         cv2.imwrite(folder_path + "\\" + str(contador) + ".png", submatrix)
                         contador += 1
-
-
-
 
