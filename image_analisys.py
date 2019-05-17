@@ -7,13 +7,13 @@ import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
 
 
-s = 5
-d = 1
+s = 9
+d = 3.0
 
 
-clf = pickle.load(open("____.clf", "rb" ))
+clf = pickle.load(open("res_Gradient Boosting_20190515-20.clf", "rb" ))
 
-img = cv2.imread(df.imatges + "classificacio_01.png")
+img = cv2.imread(df.imatges + "classificacio_02.png")
 img = img[:, :, 0]
 
 img = img / d
@@ -46,6 +46,7 @@ for i in range(0, h, s):
             xs = min_max_scaler.fit_transform(xs)
 
         resultat = clf.predict(xs)
+
 
         if resultat == "agricola":
             img[i:i + s, j:j + s] = 0

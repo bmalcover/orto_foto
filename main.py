@@ -24,7 +24,6 @@ for tipus in definitions.tipus_sol.keys():
         img = np.copy(dst)
         h, w = img.shape
 
-
         for s in definitions.sizes:
 
             contador = 0
@@ -39,7 +38,7 @@ for tipus in definitions.tipus_sol.keys():
                 for j in range(0, w-s, s):
                     submatrix = img[i:i+s, j:j+s]
 
-                    if 0 not in submatrix and contador < 1000:
+                    if 0 not in submatrix:
                         cv2.imwrite(folder_path + "\\" + str(contador) + ".png", submatrix)
                         contador += 1
 

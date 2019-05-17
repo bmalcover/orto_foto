@@ -4,6 +4,7 @@ import time
 import copy
 import numpy as np
 import pickle
+import random
 
 import matplotlib.pyplot as plt
 
@@ -31,6 +32,7 @@ best_clf = None
 resultats = {}
 config = None
 
+random.seed(33)
 
 
 for classificador in classificadors:
@@ -52,7 +54,9 @@ for divisio, d in enumerate(df.divisions):
 
             nom_path = df.path + "\\" + ts + "\\" + str(size) + "\\"
 
-            for image_name in (os.listdir(nom_path)):
+
+            seleccionades = random.sample(os.listdir(nom_path), df.n_mostres)
+            for image_name in seleccionades:
 
                 img = cv2.imread(nom_path + image_name)
                 img = img[:, :, 0] / d
@@ -117,8 +121,11 @@ for divisio, d in enumerate(df.divisions):
                 max_recall = recall
                 best_clf = copy.deepcopy(clf)
                 config = d, size
+                title = classificador['title']
 
             resultats[classificador['title']][divisio].append(recall)
+
+timestr = time.strftime("%Y%m%d-%H")
 
 for classificador in classificadors:
     plt.figure()
@@ -129,15 +136,25 @@ for classificador in classificadors:
     plt.title("Recall " + classificador['title'])
     plt.legend()
     plt.xticks(np.arange(len(df.sizes)), list(df.sizes))
+
     plt.xlabel("Patch size")
     plt.savefig("Recall " + classificador['title'] + "_" + timestr  + ".png")
     plt.close()
 
-    timestr = time.strftime("%Y%m%d-%H")
-    f = open("res_" + classificador['title'] + "_" + timestr + ".clf", 'wb')
-    pickle.dump(clf, f)
+f = open("res_" + title + "_" + timestr + ".clf", 'wb')
+pickle.dump(best_clf, f)
+f.close()
 
-    print(config[0], " - ", config[1])
+with open("parameters",'a') as fw:
+
+    fw.write(timestr + "     " + title)
+    fw.write("\n")
+    fw.write(str(config[0]) +  " - " + str(config[1]))
+    fw.write("\n")
+    fw.write("n_mostres: " + str(df.n_mostres))
+    fw.write("\n")
+    fw.write("##############################")
+    fw.write("")
 
 
 
