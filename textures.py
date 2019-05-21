@@ -149,12 +149,14 @@ with open("parameters",'a') as fw:
 
     fw.write(timestr + "     " + title)
     fw.write("\n")
+    fw.write("recall: " + max_recall)
+    fw.write("\n")
     fw.write(str(config[0]) +  " - " + str(config[1]))
     fw.write("\n")
     fw.write("n_mostres: " + str(df.n_mostres))
     fw.write("\n")
     fw.write("##############################")
-    fw.write("")
+    fw.write("\n")
 
 
 

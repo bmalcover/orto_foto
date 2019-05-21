@@ -8,12 +8,11 @@ from sklearn.preprocessing import StandardScaler
 
 
 s = 9
-d = 3.0
+d = 2
 
+clf = pickle.load(open("res_Random Forest_20190517-13.clf", "rb" ))
 
-clf = pickle.load(open("res_Gradient Boosting_20190515-20.clf", "rb" ))
-
-img = cv2.imread(df.imatges + "classificacio_02.png")
+img = cv2.imread(df.imatges + "classificacio_01.png")
 img = img[:, :, 0]
 
 img = img / d

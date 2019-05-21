@@ -5,9 +5,9 @@ class definitions:
     path = ""
     imatges = "imatges/"
 
-    n_mostres = 6500
+    n_mostres = 6000
 
-    config = {"do_pca": False, "min_max": False}
+    config = {"do_pca": True, "min_max": False}
 
     if os.name == "nt":  # os.join
         path = "C:\\Users\\gabri\\Dropbox (Maisie)\\Ortofoto\\arees_entrenament\\png\\"
@@ -22,7 +22,7 @@ class definitions:
 
     sizes = [9] #range(3, 11, 2) #  range(3, 21, 2)
 
-    divisions = [32.0, 16.0, 8.0, 4.0, 2.0, 1]
+    divisions = [1] #[32.0, 16.0, 8.0, 4.0, 2.0, 1]
 
     angles = range(0, 181, 45)
     dist = range(1, 5)
