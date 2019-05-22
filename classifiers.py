@@ -5,13 +5,13 @@ from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 
 
 classificadors = [
-                  {'title': 'Gradient Boosting',
-                   'params': {'max_depth': range(5, 21, 2), 'min_samples_split': [5, 10, 100, 500, 1000],
-                              'n_estimators': [10, 50, 100, 150]},
-                   'clf': GradientBoostingClassifier(learning_rate=0.1, max_features='sqrt',
-                                                     subsample=0.8,
-                                                     random_state=42),
-                   'enabled': True, 'pca': False},
+                  # {'title': 'Gradient Boosting',
+                  #  'params': {'max_depth': range(5, 21, 2), 'min_samples_split': [5, 10, 100, 500, 1000],
+                  #             'n_estimators': [10, 50, 100, 150]},
+                  #  'clf': GradientBoostingClassifier(learning_rate=0.1, max_features='sqrt',
+                  #                                    subsample=0.8,
+                  #                                    random_state=42),
+                  #  'enabled': True, 'pca': False},
                   # {'title': 'Nearest Neighbours',
                   #  'params': {'n_neighbors': [5, 10, 15, 20], 'weights': ['uniform', 'distance'],
                   #             'algorithm' : ['auto', 'ball_tree', 'kd_tree', 'brute']},
@@ -27,7 +27,7 @@ classificadors = [
                   #  'clf': MLPClassifier(solver='adam', alpha=1e-5, activation='logistic',random_state=42),
                   #  'enabled': True, 'pca': False}
                   {'title': 'Random Forest',
-                   'params': {'n_estimators': [10, 50, 100, 150], 'max_depth': [1, 5, 10, 15, 20, 50]},
+                   'params': {'n_estimators': [10, 50, 100, 150, 200, 250], 'max_depth': [1, 5, 10, 15, 20, 50, 100]},
                    'clf': RandomForestClassifier(random_state=42),
                    'enabled': True, 'pca': False}
                   ]

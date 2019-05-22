@@ -7,7 +7,7 @@ class definitions:
 
     n_mostres = 6000
 
-    config = {"do_pca": True, "min_max": False}
+    config = {"do_pca": False, "min_max": False}
 
     if os.name == "nt":  # os.join
         path = "C:\\Users\\gabri\\Dropbox (Maisie)\\Ortofoto\\arees_entrenament\\png\\"
