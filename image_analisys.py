@@ -7,10 +7,10 @@ import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
 
 
-s = 9
-d = 2
+s = 13
+d = 4.0
 
-clf = pickle.load(open("res_Random Forest_20190517-13.clf", "rb" ))
+clf = pickle.load(open("res_Random Forest_20190523-18.clf", "rb" ))
 
 img = cv2.imread(df.imatges + "classificacio_01.png")
 img = img[:, :, 0]
@@ -30,12 +30,15 @@ for i in range(0, h, s):
         glcm = greycomatrix(submatrix, distances=df.dist, angles=df.angles, symmetric=True, normed=False)
 
         n_features = len(df.angles) * len(df.dist)
-        m = np.zeros((n_features * len(df.prop)))
+        m = np.zeros((n_features * len(df.prop)) + 2)
         xs =[]
         for idx, p in enumerate(df.prop):  # obtenim features de la matriu GLCM
             f = greycoprops(glcm, prop=p)
             m[(idx * n_features): (idx + 1) * n_features] = f.flatten()
         # Conjunts d'entrenament
+
+        m[n_features - 2] = np.mean(submatrix[:, :])  # mean
+        m[n_features - 1] = np.std(submatrix[:, :])  # sd
 
         xs.append(m)
         xs = np.asarray(xs)

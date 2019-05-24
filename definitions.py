@@ -5,7 +5,7 @@ class definitions:
     path = ""
     imatges = "imatges/"
 
-    n_mostres = 6000
+    n_mostres = 3000
 
     config = {"do_pca": False, "min_max": False}
 
@@ -14,15 +14,16 @@ class definitions:
     else:
         path = "patates"
 
+    #entropy
     prop = ["contrast", "dissimilarity", "homogeneity", "energy", "correlation", "ASM"]
 
     tipus_sol = {"agricola": ["e_agricola", "e_agricola_1"],
                  "forestal_arbrat" : ["e_forestal_arbrat", "e_forestal_arbrat_1" ],
              "forestal_no_arbrat": ["e_forestal_no_arbrat", "e_forestal_no_arbrat_1"]}
 
-    sizes = [9] #range(3, 11, 2) #  range(3, 21, 2)
+    sizes = [5] #range(3, 5, 2) #  range(3, 21, 2)
 
-    divisions = [1] #[32.0, 16.0, 8.0, 4.0, 2.0, 1]
+    divisions = [32.0, 16.0, 8.0, 4.0, 2.0, 1]
 
-    angles = range(0, 181, 45)
-    dist = range(1, 5)
+    angles = [0] # range(0, 181, 45)
+    dist = [1] #range(1, 5)

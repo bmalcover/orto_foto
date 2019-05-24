@@ -65,12 +65,17 @@ for divisio, d in enumerate(df.divisions):
 
                 glcm = greycomatrix(img, distances=df.dist, angles=df.angles, symmetric=True, normed=False)
 
-                n_features = len(df.angles) * len(df.dist)
-                m = np.zeros((n_features * len(df.prop)))
+                n_features = (len(df.angles) * len(df.dist)) # mean and sd
+
+
+                m = np.zeros((n_features * len(df.prop)) + 2 )
 
                 for idx, p in enumerate(df.prop):  # obtenim features de la matriu GLCM
                     f = greycoprops(glcm, prop=p)
                     m[(idx*n_features): (idx + 1) * n_features] = f.flatten()
+
+                m[n_features - 2] = np.mean(img[:,:]) # mean
+                m[n_features - 1] = np.std(img[:, :]) # sd
                 # Conjunts d'entrenament
                 xs.append(m)
                 y.append(ts)
@@ -87,7 +92,7 @@ for divisio, d in enumerate(df.divisions):
 
         XX = X
         #XX = XX.astype(np.uint8)
-        X_train, X_test, y_train, y_test = train_test_split(XX, y, test_size=0.25, random_state=23)
+        X_train, X_test, y_train, y_test = train_test_split(XX, Y, test_size=0.25, random_state=23)
 
         if df.config["do_pca"] == True:
 
