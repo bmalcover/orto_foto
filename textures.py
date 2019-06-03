@@ -8,10 +8,11 @@ import random
 
 import matplotlib.pyplot as plt
 
+from features import glcm_F
 from definitions import definitions as df
 from classifiers import classificadors
 
-from skimage.feature import greycomatrix, greycoprops
+
 from sklearn.model_selection import train_test_split
 
 from sklearn.metrics import confusion_matrix
@@ -25,6 +26,8 @@ from sklearn.model_selection import GridSearchCV
 import warnings
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
+warnings.simplefilter(action='ignore', category=DeprecationWarning)
+
 np.random.seed(42)
 
 max_recall = 0
@@ -52,8 +55,7 @@ for divisio, d in enumerate(df.divisions):
         print("#######################################")
         for ts in df.tipus_sol.keys():  # per cada conjunt d'entrenament
 
-            nom_path = df.path + "\\" + ts + "\\" + str(size) + "\\"
-
+            nom_path = df.path + os.sep + ts + os.sep + str(size) + os.sep
 
             seleccionades = random.sample(os.listdir(nom_path), df.n_mostres)
             for image_name in seleccionades:
@@ -63,21 +65,10 @@ for divisio, d in enumerate(df.divisions):
 
                 img = img.astype(np.uint8)
 
-                glcm = greycomatrix(img, distances=df.dist, angles=df.angles, symmetric=True, normed=False)
+                # m = np.zeros((n_features * len(df.prop)) + 2 )
+                glcm_features = glcm_F(img, angles=df.angles, distances=df.dist, prop=df.prop)
 
-                n_features = (len(df.angles) * len(df.dist)) # mean and sd
-
-
-                m = np.zeros((n_features * len(df.prop)) + 2 )
-
-                for idx, p in enumerate(df.prop):  # obtenim features de la matriu GLCM
-                    f = greycoprops(glcm, prop=p)
-                    m[(idx*n_features): (idx + 1) * n_features] = f.flatten()
-
-                m[n_features - 2] = np.mean(img[:,:]) # mean
-                m[n_features - 1] = np.std(img[:, :]) # sd
-                # Conjunts d'entrenament
-                xs.append(m)
+                xs.append(glcm_features)
                 y.append(ts)
 
         X = np.asarray(xs)
@@ -91,7 +82,6 @@ for divisio, d in enumerate(df.divisions):
             X = min_max_scaler.fit_transform(X)
 
         XX = X
-        #XX = XX.astype(np.uint8)
         X_train, X_test, y_train, y_test = train_test_split(XX, Y, test_size=0.25, random_state=23)
 
         if df.config["do_pca"] == True:
@@ -112,7 +102,7 @@ for divisio, d in enumerate(df.divisions):
         # For amb diferents classificadors
 
         for classificador in classificadors:
-            clf = GridSearchCV(classificador['clf'], param_grid=classificador['params'], verbose=0 )
+            clf = GridSearchCV(classificador['clf'], param_grid=classificador['params'], verbose=0, iid='warn')
             clf.fit(X_train, y_train)
 
             pred = clf.predict(X_test)
@@ -150,7 +140,7 @@ f = open("res_" + title + "_" + timestr + ".clf", 'wb')
 pickle.dump(best_clf, f)
 f.close()
 
-with open("parameters",'a') as fw:
+with open("parameters", 'a') as fw:
 
     fw.write(timestr + "     " + title)
     fw.write("\n")
