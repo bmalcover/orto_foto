@@ -1,5 +1,5 @@
 import numpy as np
-from skimage.feature import greycomatrix, greycoprops
+from skimage.feature import greycomatrix, greycoprops, hog
 
 
 def glcm_F(image, angles, distances, prop, symmetric=True, normed=False):
@@ -18,3 +18,10 @@ def glcm_F(image, angles, distances, prop, symmetric=True, normed=False):
 
     return features
 
+
+def HOG(image, px, block_norm="L1"):
+
+    features = hog(image, orientations=4, pixels_per_cell=(px, px), cells_per_block=(1, 1), transform_sqrt=True,
+                      block_norm=block_norm, feature_vector=True)
+
+    return features
