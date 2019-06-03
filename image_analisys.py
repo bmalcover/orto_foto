@@ -5,6 +5,7 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
+from features import glcm_F, HOG, pca_F
 
 
 s = 13
@@ -27,20 +28,18 @@ for i in range(0, h, s):
     for j in range(0, w, s):
         submatrix = img[i:i + s, j:j + s]
 
-        glcm = greycomatrix(submatrix, distances=df.dist, angles=df.angles, symmetric=True, normed=False)
+        img = img[:, :, 0] / d
 
-        n_features = len(df.angles) * len(df.dist)
-        m = np.zeros((n_features * len(df.prop)) + 2)
-        xs =[]
-        for idx, p in enumerate(df.prop):  # obtenim features de la matriu GLCM
-            f = greycoprops(glcm, prop=p)
-            m[(idx * n_features): (idx + 1) * n_features] = f.flatten()
-        # Conjunts d'entrenament
+        img = img.astype(np.uint8)
 
-        m[n_features - 2] = np.mean(submatrix[:, :])  # mean
-        m[n_features - 1] = np.std(submatrix[:, :])  # sd
+        glcm_features = glcm_F(img, angles=df.angles, distances=df.dist, prop=df.prop)
+        HOG_features = HOG(img, s, 9)
 
-        xs.append(m)
+        features = np.zeros((glcm_features.shape[0] + 9))
+        features[0: glcm_features.shape[0]] = glcm_features
+        features[glcm_features.shape[0]:] = HOG_features
+
+        xs.append(features)
         xs = np.asarray(xs)
 
         if df.config["min_max"]:

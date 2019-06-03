@@ -8,7 +8,7 @@ import random
 
 import matplotlib.pyplot as plt
 
-from features import glcm_F
+from features import glcm_F, HOG, pca_F
 from definitions import definitions as df
 from classifiers import classificadors
 
@@ -19,7 +19,6 @@ from sklearn.metrics import confusion_matrix
 from sklearn.metrics import classification_report
 from sklearn.metrics import precision_recall_fscore_support
 
-from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import GridSearchCV
 
@@ -45,6 +44,7 @@ for classificador in classificadors:
     for d in range(len(df.divisions)):
         resultats[classificador["title"]].append([])
 
+
 for divisio, d in enumerate(df.divisions):
 
     for size in df.sizes:  # De cada mida volem obtenir totes les imatges de tots els datasets
@@ -57,7 +57,8 @@ for divisio, d in enumerate(df.divisions):
 
             nom_path = df.path + os.sep + ts + os.sep + str(size) + os.sep
 
-            seleccionades = random.sample(os.listdir(nom_path), df.n_mostres)
+            seleccionades = random.sample(os.listdir(nom_path), df.config["n_mostres"])
+
             for image_name in seleccionades:
 
                 img = cv2.imread(nom_path + image_name)
@@ -65,10 +66,14 @@ for divisio, d in enumerate(df.divisions):
 
                 img = img.astype(np.uint8)
 
-                # m = np.zeros((n_features * len(df.prop)) + 2 )
                 glcm_features = glcm_F(img, angles=df.angles, distances=df.dist, prop=df.prop)
+                HOG_features = HOG(img, size, 9)
 
-                xs.append(glcm_features)
+                features = np.zeros((glcm_features.shape[0] + 9))
+                features[0: glcm_features.shape[0]] = glcm_features
+                features[glcm_features.shape[0]:] = HOG_features
+
+                xs.append(features)
                 y.append(ts)
 
         X = np.asarray(xs)
@@ -76,28 +81,18 @@ for divisio, d in enumerate(df.divisions):
 
         print(X.shape, Y.shape)
 
-        if df.config["min_max"]:
-        # Normalitzar les dades
+        if df.config["min_max"]:  # Normalitzar les dades
+
             min_max_scaler = StandardScaler()
             X = min_max_scaler.fit_transform(X)
 
         XX = X
         X_train, X_test, y_train, y_test = train_test_split(XX, Y, test_size=0.25, random_state=23)
 
-        if df.config["do_pca"] == True:
+        if df.config["do_pca"]:
 
-            pca = PCA(n_components=X_train.shape[1])
-            principalComponents = pca.fit(X_train)
-            cumsum = np.cumsum(pca.explained_variance_ratio_)
-            r = np.where(cumsum > 0.9)
-            pca = PCA(n_components=r[0][0])
-            X_train = pca.fit_transform(X_train)
-            print("Train")
-            print(X_train.shape)
+            X_train, X_test = pca_F(X_train, X_test, 0.9999)
 
-            X_test = pca.transform(X_test)
-            print("Test")
-            print(X_test.shape)
 
         # For amb diferents classificadors
 
@@ -146,9 +141,9 @@ with open("parameters", 'a') as fw:
     fw.write("\n")
     fw.write("recall: " + str(max_recall))
     fw.write("\n")
-    fw.write(str(config[0]) +  " - " + str(config[1]))
+    fw.write(str(config[0]) + " - " + str(config[1]))
     fw.write("\n")
-    fw.write("n_mostres: " + str(df.n_mostres))
+    fw.write("n_mostres: " + str(df.config["n_mostres"]))
     fw.write("\n")
     fw.write("##############################")
     fw.write("\n")
