@@ -5,7 +5,7 @@ class definitions:
     path = ""
     imatges = "imatges/"
 
-    config = {"do_pca": False, "min_max": False, "n_mostres": 200}
+    config = {"do_pca": False, "min_max": False, "n_mostres": 3000}
 
     if os.name == "nt":  # os.join
         path = "C:\\Users\\gabri\\Dropbox (Maisie)\\Ortofoto\\arees_entrenament\\png\\"

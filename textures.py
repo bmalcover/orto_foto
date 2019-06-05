@@ -57,7 +57,12 @@ for divisio, d in enumerate(df.divisions):
 
             nom_path = df.path + os.sep + ts + os.sep + str(size) + os.sep
 
-            seleccionades = random.sample(os.listdir(nom_path), df.config["n_mostres"])
+            mostres = df.config["n_mostres"]
+
+            if mostres > len(os.listdir(nom_path)):
+                mostres = len(os.listdir(nom_path))
+
+            seleccionades = random.sample(os.listdir(nom_path), mostres)
 
             for image_name in seleccionades:
 
