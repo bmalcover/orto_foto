@@ -20,12 +20,13 @@ def glcm_F(image, angles, distances, prop, symmetric=True, normed=False):
     return features
 
 
-def HOG(image, px, orientations=9, block_norm="L1"):
+def HOG(image, px, orientations=9, block_norm="L2"):
 
-    features = hog(image, orientations=orientations, pixels_per_cell=(px, px), cells_per_block=(1, 1), transform_sqrt=True,
-                      block_norm=block_norm, feature_vector=True)
+    features, img = hog(image, orientations=orientations, pixels_per_cell=(8, 8),
+	cells_per_block=(2, 2), transform_sqrt=False,
+                      block_norm=block_norm, feature_vector=True, visualise=True)
 
-    return features
+    return features, img
 
 
 def pca_F(train_set, test_set, percent=0.95):
