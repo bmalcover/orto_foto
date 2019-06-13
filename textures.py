@@ -71,12 +71,12 @@ for divisio, d in enumerate(df.divisions):
 
                 img = img.astype(np.uint8)
 
-                glcm_features = glcm_F(img, angles=df.angles, distances=df.dist, prop=df.prop)
-                HOG_features = HOG(img, size, 9)
+                glcm_features = glcm_F(img, angles=df.angles, distances=df.dist, prop=df.prop,d=d)
+                #HOG_features = HOG(img, size, 9)
 
-                features = np.zeros((glcm_features.shape[0] + 9))
+                features = np.zeros((glcm_features.shape[0]))# + 9))
                 features[0: glcm_features.shape[0]] = glcm_features
-                features[glcm_features.shape[0]:] = HOG_features
+                #features[glcm_features.shape[0]:] = HOG_features
 
                 xs.append(features)
                 y.append(ts)
