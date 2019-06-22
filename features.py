@@ -3,11 +3,11 @@ from skimage.feature import greycomatrix, greycoprops, hog
 from sklearn.decomposition import PCA
 
 
-def glcm_F(image, angles, distances, prop, d,symmetric=True, normed=False):
+def glcm_F(image, angles, distances, prop, d,symmetric=True, normed=True):
     n_features = len(angles) * len(distances)
 
     features = np.zeros(((n_features * len(prop)) + 2))
-    glcm = greycomatrix(image, distances=distances, angles=angles, levels=int(256/(d)), symmetric=symmetric, normed=normed)
+    glcm = greycomatrix(image, distances=distances, angles=angles, levels=int(256/d), symmetric=symmetric, normed=normed)
 
     for idx, p in enumerate(prop):  # obtenim features de la matriu GLCM
         f = greycoprops(glcm, prop=p)

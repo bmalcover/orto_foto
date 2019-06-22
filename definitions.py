@@ -23,5 +23,5 @@ class definitions:
 
     divisions = [32.0, 16.0, 8.0, 4.0, 2.0, 1]
 
-    angles = range(0, 181, 45)
-    dist = range(1, 5)
+    angles = [0,180] #range(0, 181, 45)
+    dist = [1] #range(1, 5)

@@ -11,7 +11,7 @@ from features import glcm_F, HOG, pca_F
 
 
 s = 9
-d = 1.0
+d = 64.0
 
 #clf = pickle.load(open("res_Gradient Boosting_20190604-18.clf", "rb"))
 
