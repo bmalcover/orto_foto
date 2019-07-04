@@ -122,19 +122,7 @@ for divisio, d in enumerate(df.divisions):
 
 timestr = time.strftime("%Y%m%d-%H")
 
-for classificador in classificadors:
-    plt.figure()
-    for jdx, d in enumerate(df.divisions):
 
-        plt.plot(resultats[classificador['title']][jdx], label= str(d))
-
-    plt.title("Recall " + classificador['title'])
-    plt.legend()
-    plt.xticks(np.arange(len(df.sizes)), list(df.sizes))
-
-    plt.xlabel("Patch size")
-    plt.savefig("Recall " + classificador['title'] + "_" + timestr  + ".png")
-    plt.close()
 
 f = open("res_" + title + "_" + timestr + ".clf", 'wb')
 pickle.dump(best_clf, f)
