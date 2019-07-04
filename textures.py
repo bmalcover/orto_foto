@@ -74,9 +74,8 @@ for divisio, d in enumerate(df.divisions):
                 glcm_features = glcm_F(img, angles=df.angles, distances=df.dist, prop=df.prop,d=d)
                 #HOG_features = HOG(img, size, 9)
 
-                features = np.zeros((glcm_features.shape[0]))# + 9))
+                features = np.zeros((glcm_features.shape[0]))
                 features[0: glcm_features.shape[0]] = glcm_features
-                #features[glcm_features.shape[0]:] = HOG_features
 
                 xs.append(features)
                 y.append(ts)
@@ -86,17 +85,7 @@ for divisio, d in enumerate(df.divisions):
 
         print(X.shape, Y.shape)
 
-        if df.config["min_max"]:  # Normalitzar les dades
-
-            min_max_scaler = StandardScaler()
-            X = min_max_scaler.fit_transform(X)
-
-        XX = X
-        X_train, X_test, y_train, y_test = train_test_split(XX, Y, test_size=0.25, random_state=23)
-
-        if df.config["do_pca"]:
-
-            X_train, X_test = pca_F(X_train, X_test, 0.9999)
+         X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.25, random_state=23)
 
 
         # For amb diferents classificadors
@@ -121,8 +110,6 @@ for divisio, d in enumerate(df.divisions):
             resultats[classificador['title']][divisio].append(recall)
 
 timestr = time.strftime("%Y%m%d-%H")
-
-
 
 f = open("res_" + title + "_" + timestr + ".clf", 'wb')
 pickle.dump(best_clf, f)
