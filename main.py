@@ -4,7 +4,7 @@ import numpy as np
 from definitions import definitions
 
 # Programa que genera totes les matriuz nXn que no contenen el color blanc
-# les mides son agafades de la literatura: 3,5,7,9,11,13,15
+# les mides son agafades de la literatura: 3,5,7,9,11,13,15,55
 
 for tipus in definitions.tipus_sol.keys():
 

@@ -36,12 +36,8 @@ for i in range(s//2, h-(s//2), 1):
 
         tipus = clf.predict(features.reshape(1, -1))
 
-        if tipus == "agricola":
-            resultat[i, j] = 0
-        elif tipus == "forestal_arbrat":
-            resultat[i, j] = 1
-        else:
-            resultat[i, j] = 2
+        resultat[i, j] = tipus
+
 
 plt.imshow(resultat)
 plt.show()

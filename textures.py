@@ -2,9 +2,10 @@ import os
 import cv2
 import time
 import copy
-import numpy as np
 import pickle
 import random
+import numpy as np
+from sklearn import preprocessing
 
 import matplotlib.pyplot as plt
 
@@ -80,8 +81,11 @@ for divisio, d in enumerate(df.divisions):
                 xs.append(features)
                 y.append(ts)
 
-        X = np.asarray(xs)
+        le = preprocessing.LabelEncoder()
+        y = le.fit_transform(y)
         Y = np.asarray(y)
+
+        X = np.asarray(xs)
 
         print(X.shape, Y.shape)
 
