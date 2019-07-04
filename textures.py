@@ -36,7 +36,7 @@ config = None
 
 random.seed(33)
 
-
+#TODO: Fer que puguin ser actius o no
 for classificador in classificadors:
 
     resultats[classificador["title"]] = []
@@ -85,11 +85,9 @@ for divisio, d in enumerate(df.divisions):
 
         print(X.shape, Y.shape)
 
-         X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.25, random_state=23)
-
+        X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.25, random_state=23)
 
         # For amb diferents classificadors
-
         for classificador in classificadors:
             clf = GridSearchCV(classificador['clf'], param_grid=classificador['params'], verbose=0, iid='warn')
             clf.fit(X_train, y_train)
