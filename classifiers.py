@@ -27,7 +27,7 @@ classificadors = [
                   #  'clf': MLPClassifier(solver='adam', alpha=1e-5, activation='logistic',random_state=42),
                   #  'enabled': True, 'pca': False}
                   {'title': 'Random Forest',
-                   'params': {'n_estimators': [10, 50, 100, 150, 200, 250], 'max_depth': [1, 5, 10, 15, 20, 50, 100]},
+                   'params': {'n_estimators': [10, 50, 100, 150, 200, 250], 'max_depth': [1, 5, 10, 15, 20, 50, 100, 200]},
                    'clf': RandomForestClassifier(random_state=42),
                    'enabled': True, 'pca': False}
                   ]

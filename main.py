@@ -12,8 +12,8 @@ for tipus in definitions.tipus_sol.keys():
         os.makedirs(definitions.path + tipus)
 
     for nom in definitions.tipus_sol[tipus]:
-
-        img = cv2.imread(definitions.path+ nom + ".tif")
+        print(definitions.path+ nom + ".tif")
+        img = cv2.imread(definitions.path+ nom + ".tif",-1)
 
         img = img[:, :, 0]
         h, w = img.shape
@@ -39,6 +39,6 @@ for tipus in definitions.tipus_sol.keys():
                     submatrix = img[i:i+s, j:j+s]
 
                     if 0 not in submatrix:
-                        cv2.imwrite(folder_path + "\\" + str(contador) + ".png", submatrix)
+                        cv2.imwrite(folder_path + "\\" + str(contador) + ".bmp", submatrix)
                         contador += 1
 

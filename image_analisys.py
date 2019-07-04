@@ -10,60 +10,52 @@ from sklearn.preprocessing import StandardScaler
 from features import glcm_F, HOG, pca_F
 
 
-s = 9
-d = 64.0
+s = 55
+d = 32.0
 
-#clf = pickle.load(open("res_Gradient Boosting_20190604-18.clf", "rb"))
+clf = pickle.load(open("res_Random Forest_20190703-17.clf", "rb"))
 
 img = cv2.imread(df.imatges + "classificacio_01.png", -1)
 img = img[:, :, 0]
+resultat = img.copy()
 #
 img = img / d
 img = img.astype(np.uint8)
 
 
-
-#
 h, w, = img.shape
 print(h, w)
 imgs = []
-for i in range(len(df.prop)+2):
+for i in range(len(df.prop)+1):
     imgs.append(np.zeros(img.shape))
 
 
-for i in range(0, h, s):
+for i in range(s//2, h-(s//2), 1):
     print(i)
-    for j in range(0, w, s):
+    for j in range(s//2, w-(s//2), 1):
 
         xs = []
         submatrix = img[i:i + s, j:j + s]
-
         glcm_features = glcm_F(submatrix, angles=df.angles, distances=df.dist, prop=df.prop, d=d)
-        #HOG_features, himg = HOG(submatrix, s, 9)
 
-        for t in range(len(df.prop)+2):
+        features = np.zeros((glcm_features.shape[0]))  # + 9))
+        features[0: glcm_features.shape[0]] = glcm_features
 
-            imgs[t][i:i + s, j:j + s] = glcm_features[t]
+        tipus = clf.predict(features.reshape(1, -1))
 
-# HOG_features, himg = HOG(img, s, 9)
-#
-# hogImage = exposure.rescale_intensity(himg, out_range=(0, 255))
-# hogImage = hogImage.astype("uint8")
+        if tipus == "agricola":
+            #resultat[i:i + s, j:j + s] = 0
+            resultat[i, j] = 0
+        elif tipus == "forestal_arbrat":
+            #resultat[i:i + s, j:j + s] = 1
+            resultat[i, j] = 1
 
-titles = copy.copy(df.prop)
-titles.append("MEAN")
-titles.append("SD")
+        else:
+            #resultat[i:i + s, j:j + s] = 2
+            resultat[i, j] = 2
 
-for i in range(len(titles)):
-    fig = plt.figure(i)
-    plt.imshow(imgs[i])
-    plt.title(titles[i])
-    plt.colorbar()
-    plt.show()
-    plt.clf()
 
-fig = plt.figure(33)
-plt.imshow(img)
-plt.title("full")
-plt.colorbar()
+
+
+plt.imshow(resultat)
 plt.show()
