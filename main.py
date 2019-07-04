@@ -12,8 +12,8 @@ for tipus in definitions.tipus_sol.keys():
         os.makedirs(definitions.path + tipus)
 
     for nom in definitions.tipus_sol[tipus]:
-        print(definitions.path+ nom + ".tif")
-        img = cv2.imread(definitions.path+ nom + ".tif",-1)
+        print(definitions.path + nom + ".tif")
+        img = cv2.imread(definitions.path + nom + ".tif", -1)
 
         img = img[:, :, 0]
         h, w = img.shape
@@ -32,7 +32,7 @@ for tipus in definitions.tipus_sol.keys():
             if not os.path.isdir(folder_path):
                 os.makedirs(folder_path)
 
-                print(" Creant " +str(s) + " per " + nom)
+                print(" Creant " + str(s) + " per " + nom)
 
             for i in range(0, h-s, s):
                 for j in range(0, w-s, s):

@@ -2,11 +2,8 @@ from skimage.feature import greycomatrix, greycoprops
 from definitions import definitions as df
 import pickle
 import cv2
-import copy
 import numpy as np
-from skimage import exposure
 import matplotlib.pyplot as plt
-from sklearn.preprocessing import StandardScaler
 from features import glcm_F, HOG, pca_F
 
 
@@ -18,17 +15,13 @@ clf = pickle.load(open("res_Random Forest_20190703-17.clf", "rb"))
 img = cv2.imread(df.imatges + "classificacio_01.png", -1)
 img = img[:, :, 0]
 resultat = img.copy()
-#
+
 img = img / d
 img = img.astype(np.uint8)
 
 
 h, w, = img.shape
 print(h, w)
-imgs = []
-for i in range(len(df.prop)+1):
-    imgs.append(np.zeros(img.shape))
-
 
 for i in range(s//2, h-(s//2), 1):
     print(i)
@@ -44,18 +37,11 @@ for i in range(s//2, h-(s//2), 1):
         tipus = clf.predict(features.reshape(1, -1))
 
         if tipus == "agricola":
-            #resultat[i:i + s, j:j + s] = 0
             resultat[i, j] = 0
         elif tipus == "forestal_arbrat":
-            #resultat[i:i + s, j:j + s] = 1
             resultat[i, j] = 1
-
         else:
-            #resultat[i:i + s, j:j + s] = 2
             resultat[i, j] = 2
-
-
-
 
 plt.imshow(resultat)
 plt.show()
