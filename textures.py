@@ -119,7 +119,7 @@ for divisio, d in enumerate(df.divisions):
 
 timestr = time.strftime("%Y%m%d-%H")
 
-f = open("res_" + title + "_" + timestr + ".clf", 'wb')
+f = open(df.clf + "res_" + title + "_" + timestr + ".clf", 'wb')
 pickle.dump(best_clf, f)
 f.close()
 

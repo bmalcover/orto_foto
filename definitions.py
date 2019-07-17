@@ -5,6 +5,7 @@ import numpy as np
 class definitions:
 
     path = ""
+    clf = "clf"
     imatges = "imatges/"
     entrenament = "png/"
 
