@@ -57,6 +57,9 @@ for divisio, d in enumerate(df.divisions):
         for ts in df.tipus_sol.keys():  # per cada conjunt d'entrenament
 
             nom_path = df.path + os.sep + ts + os.sep + str(size) + os.sep
+            nom_m_path = df.path + os.sep + ts + "_marjades" + os.sep + str(size) + os.sep
+            nom_a_path = df.path + os.sep + ts + "_alcades" + os.sep + str(size) + os.sep
+
 
             mostres = df.config["n_mostres"]
 
@@ -68,16 +71,19 @@ for divisio, d in enumerate(df.divisions):
             for image_name in seleccionades:
 
                 img = cv2.imread(nom_path + image_name)
+                img_m = cv2.imread(nom_m_path + image_name)
+                img_a = cv2.imread(nom_a_path + image_name)
+
                 img = img[:, :, 0] / d
 
                 img = img.astype(np.uint8)
 
                 glcm_features = glcm_F(img, angles=df.angles, distances=df.dist, prop=df.prop,d=d)
-                #HOG_features = HOG(img, size, 9)
 
-                features = np.zeros((glcm_features.shape[0]))
+                features = np.zeros((glcm_features.shape[0] + 2))
                 features[0: glcm_features.shape[0]] = glcm_features
-
+                features[-1] = (np.count_nonzero(img_m[:]) / img_m.size)
+                features[-2] = np.mean(img_a[:])
                 xs.append(features)
                 y.append(ts)
 
