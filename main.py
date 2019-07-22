@@ -30,8 +30,8 @@ for tipus in df.tipus_sol.keys():
 
             contador = 0
             folder_path = df.path + tipus + os.altsep + str(s)
-            folder_m_path = df.path + tipus+ "_marjades" + os.altsep + str(s)
-            folder_a_path = df.path + tipus+ "_alcades" + os.altsep + str(s)
+            folder_m_path = df.path + tipus + "_marjades" + os.altsep + str(s)
+            folder_a_path = df.path + tipus + "_alcades" + os.altsep + str(s)
 
             print(folder_path)
             if not os.path.isdir(folder_path):
@@ -44,9 +44,8 @@ for tipus in df.tipus_sol.keys():
             for i in range(0, h-s, 25):
                 for j in range(0, w-s, 25):
                     submatrix = img[i:i+s, j:j+s]
-                    submarjada = marjada[i:i+s, j:j+s]*255
+                    submarjada = marjada[i:i+s, j:j+s]
                     subalcada = alcada[i:i+s, j:j+s]
-
 
                     if 256 not in submatrix:
 
