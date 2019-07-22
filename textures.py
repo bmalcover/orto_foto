@@ -37,6 +37,8 @@ config = None
 
 random.seed(33)
 
+glcm_features = np.zeros((len(df.angles) * len(df.dist) * len(df.prop)))
+
 #TODO: Fer que puguin ser actius o no
 for classificador in classificadors:
 
@@ -78,7 +80,7 @@ for divisio, d in enumerate(df.divisions):
 
                 img = img.astype(np.uint8)
 
-                glcm_features = glcm_F(img, angles=df.angles, distances=df.dist, prop=df.prop,d=d)
+                glcm_F(img, angles=df.angles, features=glcm_features, distances=df.dist, prop=df.prop,d=d)
 
                 features = np.zeros((glcm_features.shape[0] + 2))
                 features[0: glcm_features.shape[0]] = glcm_features
@@ -119,7 +121,7 @@ for divisio, d in enumerate(df.divisions):
 
 timestr = time.strftime("%Y%m%d-%H")
 
-f = open(df.clf + "res_" + title + "_" + timestr + ".clf", 'wb')
+f = open(df.clf + os.altsep + "res_" + title + "_" + timestr + ".clf", 'wb')
 pickle.dump(best_clf, f)
 f.close()
 
@@ -135,7 +137,4 @@ with open("parameters", 'a') as fw:
     fw.write("\n")
     fw.write("##############################")
     fw.write("\n")
-
-
-
 

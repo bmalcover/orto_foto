@@ -8,13 +8,14 @@ class definitions:
     clf = "clf"
     imatges = "imatges/"
     entrenament = "png/"
+    resultats  = "resultats/"
 
     config = {"n_mostres": 1000}
 
     if os.name == "nt":  # os.join
         path = "entrenament/Rasters/Arees_entrenament/"
         path_marjades = "entrenament/Rasters/Clip_Marjades_Sectors/"
-        path_alcades =  "entrenament/Rasters/MDP/"
+        path_alcades = "entrenament/Rasters/MDP/"
     else:
         path = "patata"
 
