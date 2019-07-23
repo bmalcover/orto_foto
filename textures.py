@@ -85,7 +85,7 @@ for divisio, d in enumerate(df.divisions):
                 features = np.zeros((glcm_features.shape[0] + 2))
                 features[0: glcm_features.shape[0]] = glcm_features
                 features[-1] = (np.count_nonzero(img_m[:]) / img_m.size)
-                features[-2] = np.mean(img_a[:])
+                features[-2] = np.amin(img_a[:])
                 xs.append(features)
                 y.append(ts)
 
