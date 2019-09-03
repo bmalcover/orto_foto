@@ -76,7 +76,7 @@ for divisio, d in enumerate(df.divisions):
                 img_a = cv2.imread(nom_a_path + image_name)  # alsades
 
                 img = img[:, :, 0] / d
-                img_a = img_a / 255
+                #img_a = img_a / 255
 
                 img = img.astype(np.uint8)
 
