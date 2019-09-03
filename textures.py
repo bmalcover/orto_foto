@@ -62,7 +62,6 @@ for divisio, d in enumerate(df.divisions):
             nom_m_path = df.path + os.sep + ts + "_marjades" + os.sep + str(size) + os.sep
             nom_a_path = df.path + os.sep + ts + "_alcades" + os.sep + str(size) + os.sep
 
-
             mostres = df.config["n_mostres"]
 
             if mostres > len(os.listdir(nom_path)):
@@ -73,10 +72,11 @@ for divisio, d in enumerate(df.divisions):
             for image_name in seleccionades:
 
                 img = cv2.imread(nom_path + image_name)
-                img_m = cv2.imread(nom_m_path + image_name)
-                img_a = cv2.imread(nom_a_path + image_name)
+                img_m = cv2.imread(nom_m_path + image_name)  # margades
+                img_a = cv2.imread(nom_a_path + image_name)  # alsades
 
                 img = img[:, :, 0] / d
+                img_a = img_a / 255
 
                 img = img.astype(np.uint8)
 
@@ -85,7 +85,7 @@ for divisio, d in enumerate(df.divisions):
                 features = np.zeros((glcm_features.shape[0] + 2))
                 features[0: glcm_features.shape[0]] = glcm_features
                 features[-1] = (np.count_nonzero(img_m[:]) / img_m.size)
-                features[-2] = np.amin(img_a[:])
+                features[-2] = np.mean(img_a[:])
                 xs.append(features)
                 y.append(ts)
 

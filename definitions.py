@@ -8,7 +8,7 @@ class definitions:
     clf = "clf"
     imatges = "imatges/"
     entrenament = "png/"
-    resultats  = "resultats/"
+    resultats = "resultats/"
 
     config = {"n_mostres": 1000}
 
@@ -22,24 +22,24 @@ class definitions:
     #entropy
     prop = ["contrast", "dissimilarity", "homogeneity", "energy", "correlation", "ASM"]
 
-    tipus_sol = {"agricola": ["arees_entrenament_C_agricola","arees_entrenament_D_agricola"],
-                 "forestal_arbrat": ["arees_entrenament_C_forestal_arbrat","arees_entrenament_D_forestal_arbrat"],
+    tipus_sol = {"agricola": ["arees_entrenament_C_agricola", "arees_entrenament_D_agricola"],
+                 "forestal_arbrat": ["arees_entrenament_C_forestal_arbrat", "arees_entrenament_D_forestal_arbrat"],
                  "forestal_no_arbrat": ["arees_entrenament_C_forestal_NO_arbrat", "arees_entrenament_D_forestal_no_arbrat", "arees_entrenament_E_forestal_no_arbrat"]}
 
-
-
+    @staticmethod
     def capa_marjades(nom):
 
         return "Marjades_Clip_Mosaic_orto56_STPH_C_1.tif"
 
+    @staticmethod
     def capa_alcades(nom):
 
         return "MDP_Clip_Mosaic_orto56_STPH_C.tif"
 
-    sizes = [55] #range(3, 11, 2)
+    sizes = [60]   # range(3, 11, 2)
 
     divisions = [64.0, 32.0, 16.0, 8.0, 4.0, 2.0, 1]
 
-    angles = [0]#,45,90] #range(0, 181, 45)
-    dist = [1] # range(1, 5)
+    angles = [0]  # ,45,90] #range(0, 181, 45)
+    dist = [1]  # range(1, 5)
 

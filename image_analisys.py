@@ -8,10 +8,10 @@ from features import glcm_F
 
 
 def calcul(init, size):
-    s = 55
+    s = df.sizes[0] #55
     d = 2.0
 
-    clf = pickle.load(open(df.clf + os.altsep + "res_Random Forest_20190722-15.clf", "rb"))
+    clf = pickle.load(open(df.clf + os.altsep + "res_Random Forest_20190725-09.clf", "rb"))
 
     img = cv2.imread(df.imatges + "Clip_Clip_Mosaic_orto56_STPH_D.tif", -1)
     marjada = cv2.imread(df.imatges + "Marjades_Clip_Clip_Mosaic_orto56_STPH_D_meu.tif", -1)

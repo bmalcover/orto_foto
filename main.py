@@ -24,6 +24,8 @@ for tipus in df.tipus_sol.keys():
         marjada = cv2.imread(df.path_marjades + nom_marjades, -1)
         alcada = cv2.imread(df.path_alcades + nom_alcades, -1)
 
+        alcada = (alcada / np.amax(alcada[:])) * 255
+
         h, w = img.shape
 
         for s in df.sizes:

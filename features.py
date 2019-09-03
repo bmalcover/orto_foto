@@ -6,8 +6,6 @@ from sklearn.decomposition import PCA
 def glcm_F(image, angles, distances, prop, d, features, symmetric=True, normed=True):
     n_features = len(angles) * len(distances)
 
-    #features = np.zeros((n_features * len(prop)))
-
     glcm = greycomatrix(image, distances=distances, angles=angles, levels=int(256/d), symmetric=symmetric, normed=normed)
 
     for idx, p in enumerate(prop):  # obtenim features de la matriu GLCM
