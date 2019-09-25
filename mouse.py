@@ -46,6 +46,7 @@ def click_and_crop(event, x, y, flags, param):
 
 
 # construct the argument parser and parse the arguments
+
 image = cv2.imread(df.imatges + "Clip_Clip_Mosaic_orto56_STPH_D.tif", -1)
 image = image.astype(np.uint8)
 rsz = 12

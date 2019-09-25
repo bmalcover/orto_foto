@@ -3,15 +3,15 @@ import os
 import pickle
 import cv2
 import numpy as np
-import matplotlib.pyplot as plt
 from features import glcm_F
 
 
 def calcul(init, size):
-    s = df.sizes[0] #55
+
+    s = df.sizes[0]
     d = 2.0
 
-    clf = pickle.load(open(df.clf + os.altsep + "res_Random Forest_20190903-16.clf", "rb"))
+    clf = pickle.load(open(df.clf + os.altsep + "res_Random Forest_20190909-19.clf", "rb"))
 
     img = cv2.imread(df.imatges + "Clip_Clip_Mosaic_orto56_STPH_D.tif", -1)
     marjada = cv2.imread(df.imatges + "Marjades_Clip_Clip_Mosaic_orto56_STPH_D_meu.tif", -1)
@@ -38,8 +38,6 @@ def calcul(init, size):
             submarjada = marjada[jdx[0]: jdx[1], idx[0]:idx[1]]
             subalcada = alcada[jdx[0]: jdx[1], idx[0]:idx[1]]
 
-            #subalcada = subalcada / 255
-
             glcm_F(submatrix, angles=df.angles, features=glcm_features, distances=df.dist, prop=df.prop, d=d)
 
             features[count, 0: glcm_features.shape[0]] = np.copy(glcm_features)
@@ -52,10 +50,3 @@ def calcul(init, size):
     resultat = np.reshape(resultat, (w, h), order='F')
 
     return resultat
-
-    # plt.subplot(1, 2, 1), plt.imshow(img[ih: ih + h, iw: iw + w], cmap='gray')
-    # plt.title('Original'), plt.xticks([]), plt.yticks([])
-    # plt.subplot(1, 2, 2), plt.imshow(resultat)
-    # plt.title('Classificat'), plt.xticks([]), plt.yticks([])
-    #
-    # plt.show()
