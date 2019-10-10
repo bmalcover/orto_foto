@@ -6,27 +6,22 @@ import numpy as np
 from features import glcm_F
 
 
-def calcul(init, size):
+def calcul(img, marjada, alcada, clf):
 
     s = df.sizes[0]
     d = 2.0
 
-    clf = pickle.load(open(df.clf + os.altsep + "res_Random Forest_20190909-19.clf", "rb"))
-
-    img = cv2.imread(df.imatges + "Clip_Clip_Mosaic_orto56_STPH_D.tif", -1)
-    marjada = cv2.imread(df.imatges + "Marjades_Clip_Clip_Mosaic_orto56_STPH_D_meu.tif", -1)
-    alcada = cv2.imread(df.imatges + "MDP_Clip_Clip_Mosaic_orto56_STPH_D.tif", -1)
-
     img = img / d
     img = img.astype(np.uint8)
 
-    ih, iw = init
-    h, w = size
+    ih, iw = 0, 0
+    h, w = img.shape
 
     print(h, w)
 
     features = np.zeros((w*h, 8))  # TODO CUTREEE
     glcm_features = np.zeros(6)
+
     count = 0
     for i in range(ih, (ih + h), 1):
         print(i)
