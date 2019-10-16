@@ -23,16 +23,14 @@ def calcul(img, marjada, alcada, clf):
     glcm_features = np.zeros(6)
 
     count = 0
-    for i in range(ih, (ih + h), 1):
-        print(i)
-        for j in range(iw, (iw + w), 1):
+    for i in range((s//2), (ih + h), 1):
+        for j in range((s//2), (iw + w), 1):
             idx = i-(s//2), i + (s//2)
             jdx = j-(s//2), j + (s//2)
 
             submatrix = img[jdx[0]: jdx[1], idx[0]:idx[1]]
             submarjada = marjada[jdx[0]: jdx[1], idx[0]:idx[1]]
             subalcada = alcada[jdx[0]: jdx[1], idx[0]:idx[1]]
-
             glcm_F(submatrix, angles=df.angles, features=glcm_features, distances=df.dist, prop=df.prop, d=d)
 
             features[count, 0: glcm_features.shape[0]] = np.copy(glcm_features)

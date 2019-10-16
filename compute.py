@@ -32,7 +32,9 @@ for i in range(0, rows, yBSize):
         numRows = yBSize
     else:
         numRows = rows - i
+
     for j in range(0, cols, xBSize):
+
         if j + xBSize < cols:
             numCols = xBSize
         else:
