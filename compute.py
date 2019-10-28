@@ -1,17 +1,18 @@
 import os
 import pickle
-from definitions import definitions as df
+import numpy as np
 from osgeo import gdal
 from image_analisys import calcul
-import numpy as np
+from definitions import definitions as df
+import matplotlib.pyplot as plt
 
 print(df.clf)
 
 clf = pickle.load(open(df.clf + os.sep + "res_Random Forest_20190909-19.clf", "rb"))
 
 idx = 0
-xBSize = 1000
-yBSize = 1000
+xBSize = 1020
+yBSize = 1020
 
 out_driver = gdal.GetDriverByName("GTiff")
 gtif = gdal.Open(df.imatges + "Mosaic_orto56_STPH.tif")
@@ -30,47 +31,43 @@ for i in range(0, rows, yBSize):
 
     if i + yBSize < rows:
         numRows = yBSize
-    else:
-        numRows = rows - i
 
-    for j in range(0, cols, xBSize):
+        for j in range(0, cols, xBSize):
 
-        if j + xBSize < cols:
-            numCols = xBSize
-        else:
-            numCols = cols - j
+            if j + xBSize < cols:
+                numCols = xBSize
 
-        data = band.ReadAsArray(j, i, numCols, numRows)
-        data = np.flip(data)  # ALERTA!
+                data = band.ReadAsArray(j, i, numCols, numRows)
+                data = np.flip(data)  # ALERTA!
 
-        marge = marges.ReadAsArray(j, i, numCols, numRows)
-        marge = np.flip(marge)
+                marge = marges.ReadAsArray(j, i, numCols, numRows)
+                marge = np.flip(marge)
 
-        altura = alcades.ReadAsArray(j, i, numCols, numRows)
-        altura = np.flip(altura)
+                altura = alcades.ReadAsArray(j, i, numCols, numRows)
+                altura = np.flip(altura)
 
-        if np.unique(data).shape[0] > 1:  # si no tota la matriu és igual
+                if np.unique(data).shape[0] > 1:  # si no tota la matriu és igual
 
+                    #PROCESSAMENT
 
-            #PROCESSAMENT
-
-            resultat = calcul(data, marge, altura, clf)
+                    resultat = calcul(data, marge, altura, clf)
 
 
-            outfile = "res/" + str(idx) + ".tiff"
-            out_data = out_driver.Create(str(outfile), yBSize, xBSize, 1, gdal.GDT_UInt16)
-            out_data.GetRasterBand(1).WriteArray(resultat)
+                    outfile = "res/" + str(idx) + ".tiff"
 
-            # this is how to get the coordinate in space.
-            posX = (px_w * i) + (rot1 * j) + x_offset
-            posY = (rot2 * i) + (px_h * j) + y_offset
-            # shift to the center of the pixel
-            posX += px_w / 2.0
-            posY += px_h / 2.0
+                    out_data = out_driver.Create(str(outfile), yBSize, xBSize, 1, gdal.GDT_UInt16)
+                    out_data.GetRasterBand(1).WriteArray(resultat)
 
-            out_data.SetGeoTransform([posY, px_w, rot1, posX, rot2, px_h])
-            out_data.SetProjection(projection)
-            idx += 1
-            print(idx)
+                    # this is how to get the coordinate in space.
+                    posX = (px_w * i) + (rot1 * j) + x_offset
+                    posY = (rot2 * i) + (px_h * j) + y_offset
+                    # shift to the center of the pixel
+                    posX += px_w / 2.0
+                    posY += px_h / 2.0
+
+                    out_data.SetGeoTransform([posY, px_w, rot1, posX, rot2, px_h])
+                    out_data.SetProjection(projection)
+                    idx += 1
+                    print(idx)
 
 print("pasisut")
