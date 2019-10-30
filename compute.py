@@ -49,9 +49,7 @@ for i in range(0, rows, yBSize):
                 if np.unique(data).shape[0] > 1:  # si no tota la matriu és igual
 
                     #PROCESSAMENT
-
                     resultat = calcul(data, marge, altura, clf)
-
 
                     outfile = "res/" + str(idx) + ".tiff"
 
@@ -65,7 +63,7 @@ for i in range(0, rows, yBSize):
                     posX += px_w / 2.0
                     posY += px_h / 2.0
 
-                    out_data.SetGeoTransform([posY, px_w, rot1, posX, rot2, px_h])
+                    out_data.SetGeoTransform([posX, px_w, rot1, posY, rot2, px_h])
                     out_data.SetProjection(projection)
                     idx += 1
                     print(idx)
