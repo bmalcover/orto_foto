@@ -6,25 +6,26 @@ import numpy as np
 from features import glcm_F
 
 
-def calcul(img, marjada, alcada, clf):
+def calcul(img, marjada, alcada, clf, ofset):
 
-    s = df.sizes[0]
+
     d = 2.0
 
     img = img / d
     img = img.astype(np.uint8)
 
     h, w = img.shape
-
+    print("hi", end=" ")
     print(h, w)
 
     features = np.zeros((w*h, 8))  # TODO CUTREEE
     glcm_features = np.zeros(6)
 
-    for i in range((s//2), (h-(s//2)), 1):
-        for j in range((s//2), (w-(s//2)), 1):
-            idx = i-(s//2), i + (s//2)
-            jdx = j-(s//2), j + (s//2)
+    for i in range(ofset, h-ofset, 1):
+        for j in range(ofset, w-ofset, 1):
+
+            idx = i-ofset, i + ofset
+            jdx = j-ofset, j + ofset
             count = np.ravel_multi_index(([i], [j]), (h, w))
 
             submatrix = img[jdx[0]: jdx[1], idx[0]:idx[1]]
@@ -39,5 +40,5 @@ def calcul(img, marjada, alcada, clf):
 
     resultat = clf.predict(features)
     resultat = np.reshape(resultat, (w, h), order='F')
-
+    resultat = np.copy(resultat[ofset:resultat.shape[0]-ofset, ofset:resultat.shape[1]-ofset])
     return resultat
